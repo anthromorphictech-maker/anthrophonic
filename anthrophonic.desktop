@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Anthrophonic
+Comment=Multi-output audio with Bluetooth latency sync
+Exec=__EXEC__
+Icon=audio-volume-high
+Terminal=false
+Categories=AudioVideo;Audio;

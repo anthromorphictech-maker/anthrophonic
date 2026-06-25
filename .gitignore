@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.pyc
+
+# Config/estado generado en runtime (no versionar)
+*.wav
+config/
+*.local
+
+# Editor / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
