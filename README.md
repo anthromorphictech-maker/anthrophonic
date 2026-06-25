@@ -12,39 +12,6 @@ UI language auto-detects from the system locale (Spanish if `$LANG` starts with 
 
 ---
 
-## 🇪🇸 Español
-
-### Qué hace
-PipeWire deja sonar varias salidas a la vez creando un *null-sink* central y un *loopback*
-por cada salida. El problema: el Bluetooth añade ~150-300 ms de retardo (decodificación A2DP
-+ buffer del casco) → eco respecto a los altavoces. Esta herramienta:
-
-- Activa/desactiva cada salida con botones de color (azul = activa).
-- Retrasa las salidas de cable para cuadrarlas con el Bluetooth.
-- **auto**: lee la latencia que PipeWire conoce del BT y aplica el retardo, aprendiendo el
-  retardo "oculto" del casco que PipeWire no ve.
-- **pulso de prueba**: tren de clics nítidos para afinar a oído.
-
-### Requisitos
-- PipeWire (con `pipewire-pulse`) — `pactl`, `pw-dump`
-- `paplay` (paquete `pulseaudio-utils`)
-- Python 3 + `numpy` (para generar el pulso de prueba)
-- Tkinter (`python3-tk`)
-
-### Instalar
-```bash
-./install.sh
-```
-Copia el script a `~/.local/bin/` y crea el lanzador en el menú. Para desinstalar:
-`./install.sh --uninstall`.
-
-### Uso
-1. Abre **Audio combinado**.
-2. Activa las salidas que quieras (chips azules).
-3. Pulsa **auto** para sincronizar, o ajusta a mano con el slider + **pulso**.
-
----
-
 ## 🇬🇧 English
 
 ### What it does
@@ -74,6 +41,39 @@ against wired speakers. This tool:
 1. Open **Anthrophonic**.
 2. Enable the outputs you want (blue chips).
 3. Hit **auto** to sync, or tune manually with the slider + **pulse**.
+
+---
+
+## 🇪🇸 Español
+
+### Qué hace
+PipeWire deja sonar varias salidas a la vez creando un *null-sink* central y un *loopback*
+por cada salida. El problema: el Bluetooth añade ~150-300 ms de retardo (decodificación A2DP
++ buffer del casco) → eco respecto a los altavoces. Esta herramienta:
+
+- Activa/desactiva cada salida con botones de color (azul = activa).
+- Retrasa las salidas de cable para cuadrarlas con el Bluetooth.
+- **auto**: lee la latencia que PipeWire conoce del BT y aplica el retardo, aprendiendo el
+  retardo "oculto" del casco que PipeWire no ve.
+- **pulso de prueba**: tren de clics nítidos para afinar a oído.
+
+### Requisitos
+- PipeWire (con `pipewire-pulse`) — `pactl`, `pw-dump`
+- `paplay` (paquete `pulseaudio-utils`)
+- Python 3 + `numpy` (para generar el pulso de prueba)
+- Tkinter (`python3-tk`)
+
+### Instalar
+```bash
+./install.sh
+```
+Copia el script a `~/.local/bin/` y crea el lanzador en el menú. Para desinstalar:
+`./install.sh --uninstall`.
+
+### Uso
+1. Abre **Anthrophonic**.
+2. Activa las salidas que quieras (chips azules).
+3. Pulsa **auto** para sincronizar, o ajusta a mano con el slider + **pulso**.
 
 ---
 
