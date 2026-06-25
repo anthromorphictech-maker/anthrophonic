@@ -77,11 +77,11 @@ Copia el script a `~/.local/bin/` y crea el lanzador en el menú. Para desinstal
 
 ---
 
-## Cómo funciona / How it works
-Ver / see [docs/arquitectura.md](docs/arquitectura.md).
+## How it works
+See [docs/arquitectura.md](docs/arquitectura.md).
 
-## Estado / Status
-Funcional. Ver pendientes en [ROADMAP.md](ROADMAP.md).
+## Status
+Working. Pending items in [ROADMAP.md](ROADMAP.md).
 
-## Licencia / License
+## License
 [MIT](LICENSE).

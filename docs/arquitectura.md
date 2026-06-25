@@ -1,54 +1,49 @@
-# Arquitectura / Architecture
+# Architecture
 
-## Grafo de audio / Audio graph
+## Audio graph
 
 ```
   apps (Chrome, etc.)
         │
         ▼
-  [ null-sink "combinado" ]  ← salida por defecto / default sink
+  [ null-sink "combinado" ]  ← default sink
         │ .monitor
-        ├── loopback ──(latency_msec=60)──▶  Bluetooth   (referencia / reference)
-        ├── loopback ──(latency_msec=D_a)─▶  Analógico   (cable / wired)
-        └── loopback ──(latency_msec=D_h)─▶  HDMI        (cable / wired)
+        ├── loopback ──(latency_msec=60)──▶  Bluetooth   (reference)
+        ├── loopback ──(latency_msec=D_a)─▶  Analog      (wired)
+        └── loopback ──(latency_msec=D_h)─▶  HDMI        (wired)
 ```
 
-- `module-null-sink` central: las apps reproducen aquí.
-- Un `module-loopback` por salida activa, desde `combinado.monitor` al sink físico.
-- `latency_msec` del loopback = retardo real añadido a esa rama.
+- A central `module-null-sink`: apps play here.
+- One `module-loopback` per active output, from `combinado.monitor` to the physical sink.
+- The loopback's `latency_msec` = real delay added to that branch.
 
-## Modelo de sincronía / Sync model
+## Sync model
 
-El Bluetooth es la salida más lenta (referencia). Cada salida de cable se retrasa para
-emitir al mismo tiempo que el BT:
+Bluetooth is the slowest output (the reference). Each wired output is delayed so it emits at
+the same time as BT:
 
 ```
-D[cable] = (latencia_BT - latencia_cable) + extra[cable]
+D[wired] = (latency_BT - latency_wired) + extra[wired]
 ```
 
-- `latencia_X` = lo que PipeWire reporta en `pw-dump` (`Latency.Input.maxNs`, ns→ms).
-  El cable suele dar 0; el BT da el buffer A2DP (~140 ms).
-- `extra[cable]` = retardo **oculto** que PipeWire no ve (decodificación + DAC del casco BT,
-  ~190 ms típico). Se **aprende** cuando ajustas a mano:
-  `extra = D_manual - (latencia_BT - latencia_cable)`.
-- El BT mantiene `latency_msec=60` (keepalive: evita que el sink BT se suspenda en silencio).
+- `latency_X` = what PipeWire reports in `pw-dump` (`Latency.Input.maxNs`, ns→ms). Wired usually
+  reports 0; BT reports its A2DP buffer (~140 ms).
+- `extra[wired]` = the **hidden** delay PipeWire can't see (decode + DAC inside the BT headset,
+  ~190 ms typical). It is **learned** when you tune by hand:
+  `extra = D_manual - (latency_BT - latency_wired)`.
+- BT keeps `latency_msec=60` (keepalive: stops the BT sink from suspending on silence).
 
-Cada salida de cable guarda su propio `extra` (HDMI a TV suele diferir del analógico).
+Each wired output stores its own `extra` (HDMI to a TV often differs from analog).
 
-## Persistencia / Persistence
+## Persistence
 
 `~/.config/anthrophonic/`
-- `delays.json`  — `{sink: ms}` retardo de loopback por salida.
-- `offsets.json` — `{sink: ms}` extra aprendido por salida.
-- `pulse.wav`   — tren de clics generado para afinar (con sustain anti-suspensión BT).
+- `delays.json`  — `{sink: ms}` loopback delay per output.
+- `offsets.json` — `{sink: ms}` learned extra per output.
+- `pulse.wav`    — generated click train for tuning (with a faint sustain that keeps BT awake).
 
-## Por qué no auto-total / Why not fully automatic
+## Why not fully automatic
 
-El retardo que domina vive **dentro del casco BT** (decodificación + DAC), y PipeWire no lo
-expone. Medirlo acústicamente tampoco vale: el casco está en tus oídos, el micro no lo oye.
-Por eso `extra` se aprende una vez por dispositivo (es constante por casco) y luego `auto`
-ya clava el valor.
-
-The dominant delay lives **inside the BT headset** and PipeWire doesn't expose it. Acoustic
-measurement won't work either (the headset is on your ears, the mic can't hear it). So `extra`
-is learned once per device (constant per headset); after that `auto` nails it.
+The dominant delay lives **inside the BT headset** (decode + DAC) and PipeWire doesn't expose
+it. Acoustic measurement won't work either: the headset is on your ears, the mic can't hear it.
+So `extra` is learned once per device (constant per headset); after that `auto` nails it.
