@@ -11,7 +11,7 @@
 ## Packaging
 - [x] `install.sh` (dependency check + `.desktop` install).
 - [x] `docs/panel.png` screenshot for the README.
-- [ ] Custom icon instead of `audio-volume-high`.
+- [x] Custom icon (copper sunburst).
 
 ## Future ideas
 - [ ] Remember `extra` per BT device (MAC) for multiple headsets.

@@ -34,4 +34,16 @@ install -m 755 "$SRC_DIR/anthrophonic.py" "$BIN"
 sed "s|__EXEC__|$BIN|" "$SRC_DIR/anthrophonic.desktop" > "$DESKTOP"
 chmod +x "$DESKTOP"
 
+# Icon into the hicolor theme
+ICON_BASE="$HOME/.local/share/icons/hicolor"
+for sz in 16 32 48 64 128; do
+    if [ -f "$SRC_DIR/icons/anthrophonic-$sz.png" ]; then
+        mkdir -p "$ICON_BASE/${sz}x${sz}/apps"
+        cp "$SRC_DIR/icons/anthrophonic-$sz.png" "$ICON_BASE/${sz}x${sz}/apps/anthrophonic.png"
+    fi
+done
+mkdir -p "$ICON_BASE/256x256/apps"
+cp "$SRC_DIR/icons/anthrophonic.png" "$ICON_BASE/256x256/apps/anthrophonic.png"
+gtk-update-icon-cache -f -t "$ICON_BASE" 2>/dev/null || true
+
 echo ">> Done. Look for 'Anthrophonic' in your menu, or run: $BIN"
